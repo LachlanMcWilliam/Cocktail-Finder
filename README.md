@@ -31,7 +31,8 @@ To view the docs for the Web app the .md files are under the /Client/website/com
 - [ ] Web session functionality
 - [ ] User logins and drink saving
 - [ ] Fix whatever mess this project will become so it makes at least some sense
-      [Back To The Top](#read-me-template)
+
+[Back To The Top](#read-me-template)
 
 ---
 
