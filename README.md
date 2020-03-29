@@ -62,7 +62,7 @@ API built with:
 
 ## How To Use
 
-Run the API.exe file to run the API on your local machine (it uses port 3000), then CD into the client directory and run `npm run serve` (you must have Node.js installed) to start the web app.
+You will need Golang and Node.js installed on your machine to use the app, to start the API run `go run main.go` in the root directory (it uses port 3000), you can run `go install .` to create an .exe file you can run instead. Then CD into the client directory and run `npm install` then `npm run serve` to start the web app.
 
 [Back To The Top](#read-me-template)
 
