@@ -129,13 +129,13 @@ func main() {
 
 	m := martini.Classic()
 
-	// CORS for https://foo.* origins, allowing:
-	// - PUT and PATCH methods
+	// CORS for * origins, allowing:
+	// - POST methods
 	// - Origin header
 	// - Credentials share
 	m.Use(cors.Allow(&cors.Options{
 		AllowOrigins:     []string{"*"},
-		AllowMethods:     []string{"PUT", "PATCH", "POST"},
+		AllowMethods:     []string{"POST"},
 		AllowHeaders:     []string{"X-Requested-With", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length", "Access-Control-Allow-Origin"},
 		AllowCredentials: true,
@@ -245,6 +245,16 @@ func contains(a []string, x string) bool {
 	return false
 }
 
+func newIngredient(ing string, msr string) ingredient {
+	var ingr ingredient
+	if msr != "" {
+		ingr = ingredient{ing, msr}
+	} else {
+		ingr = ingredient{ing, "To taste"}
+	}
+	return ingr
+}
+
 func getCocktail(id string, ing []string) cocktail {
 
 	resp, err := http.Get("https://www.thecocktaildb.com/api/json/v2/" + p.APIKey + "/lookup.php?i=" + id)
@@ -265,200 +275,109 @@ func getCocktail(id string, ing []string) cocktail {
 
 	if df.StrIngredient1 != "" {
 		if ingredients[strings.ToUpper(df.StrIngredient1)] {
-			var ingr ingredient
-			if df.StrMeasure1 != "" {
-				ingr = ingredient{df.StrIngredient1, df.StrMeasure1}
-			} else {
-				ingr = ingredient{df.StrIngredient1, "To taste"}
-			}
-			i = append(i, ingr)
+			i = append(i, newIngredient(df.StrIngredient1, df.StrMeasure1))
 		} else {
 			return c
 		}
 	}
 	if df.StrIngredient2 != "" {
 		if ingredients[strings.ToUpper(df.StrIngredient2)] {
-			var ingr ingredient
-			if df.StrMeasure2 != "" {
-				ingr = ingredient{df.StrIngredient2, df.StrMeasure2}
-			} else {
-				ingr = ingredient{df.StrIngredient2, "To taste"}
-			}
-			i = append(i, ingr)
+			i = append(i, newIngredient(df.StrIngredient2, df.StrMeasure2))
 		} else {
 			return c
 		}
 	}
 	if df.StrIngredient3 != "" {
 		if ingredients[strings.ToUpper(df.StrIngredient3)] {
-			var ingr ingredient
-			if df.StrMeasure3 != "" {
-				ingr = ingredient{df.StrIngredient3, df.StrMeasure3}
-			} else {
-				ingr = ingredient{df.StrIngredient3, "To taste"}
-			}
-			i = append(i, ingr)
+			i = append(i, newIngredient(df.StrIngredient3, df.StrMeasure3))
 		} else {
 			return c
 		}
 	}
 	if df.StrIngredient4 != "" {
 		if ingredients[strings.ToUpper(df.StrIngredient4)] {
-			var ingr ingredient
-			if df.StrMeasure4 != "" {
-				ingr = ingredient{df.StrIngredient4, df.StrMeasure4}
-			} else {
-				ingr = ingredient{df.StrIngredient4, "To taste"}
-			}
-			i = append(i, ingr)
+			i = append(i, newIngredient(df.StrIngredient4, df.StrMeasure4))
 		} else {
 			return c
 		}
 	}
 	if df.StrIngredient5 != "" {
 		if ingredients[strings.ToUpper(df.StrIngredient5)] {
-			var ingr ingredient
-			if df.StrMeasure5 != "" {
-				ingr = ingredient{df.StrIngredient5, df.StrMeasure5}
-			} else {
-				ingr = ingredient{df.StrIngredient5, "To taste"}
-			}
-			i = append(i, ingr)
+			i = append(i, newIngredient(df.StrIngredient5, df.StrMeasure5))
 		} else {
 			return c
 		}
 	}
 	if df.StrIngredient6 != "" {
 		if ingredients[strings.ToUpper(df.StrIngredient6)] {
-			var ingr ingredient
-			if df.StrMeasure6 != "" {
-				ingr = ingredient{df.StrIngredient6, df.StrMeasure6}
-			} else {
-				ingr = ingredient{df.StrIngredient6, "To taste"}
-			}
-			i = append(i, ingr)
+			i = append(i, newIngredient(df.StrIngredient6, df.StrMeasure6))
 		} else {
 			return c
 		}
 	}
 	if df.StrIngredient7 != "" {
 		if ingredients[strings.ToUpper(df.StrIngredient7)] {
-			var ingr ingredient
-			if df.StrMeasure7 != "" {
-				ingr = ingredient{df.StrIngredient7, df.StrMeasure7}
-			} else {
-				ingr = ingredient{df.StrIngredient7, "To taste"}
-			}
-			i = append(i, ingr)
+			i = append(i, newIngredient(df.StrIngredient7, df.StrMeasure7))
 		} else {
 			return c
 		}
 	}
 	if df.StrIngredient8 != "" {
 		if ingredients[strings.ToUpper(df.StrIngredient8)] {
-			var ingr ingredient
-			if df.StrMeasure8 != "" {
-				ingr = ingredient{df.StrIngredient8, df.StrMeasure8}
-			} else {
-				ingr = ingredient{df.StrIngredient8, "To taste"}
-			}
-			i = append(i, ingr)
+			i = append(i, newIngredient(df.StrIngredient8, df.StrMeasure8))
 		} else {
 			return c
 		}
 	}
 	if df.StrIngredient9 != "" {
 		if ingredients[strings.ToUpper(df.StrIngredient9)] {
-			var ingr ingredient
-			if df.StrMeasure3 != "" {
-				ingr = ingredient{df.StrIngredient9, df.StrMeasure9}
-			} else {
-				ingr = ingredient{df.StrIngredient9, "To taste"}
-			}
-			i = append(i, ingr)
+			i = append(i, newIngredient(df.StrIngredient9, df.StrMeasure9))
 		} else {
 			return c
 		}
 	}
 	if df.StrIngredient10 != "" {
 		if ingredients[strings.ToUpper(df.StrIngredient10)] {
-			var ingr ingredient
-			if df.StrMeasure10 != "" {
-				ingr = ingredient{df.StrIngredient10, df.StrMeasure10}
-			} else {
-				ingr = ingredient{df.StrIngredient10, "To taste"}
-			}
-			i = append(i, ingr)
+			i = append(i, newIngredient(df.StrIngredient10, df.StrMeasure10))
 		} else {
 			return c
 		}
 	}
 	if df.StrIngredient11 != "" {
 		if ingredients[strings.ToUpper(df.StrIngredient11)] {
-			var ingr ingredient
-			if df.StrMeasure3 != "" {
-				ingr = ingredient{df.StrIngredient11, df.StrMeasure11}
-			} else {
-				ingr = ingredient{df.StrIngredient11, "To taste"}
-			}
-			i = append(i, ingr)
+			i = append(i, newIngredient(df.StrIngredient11, df.StrMeasure11))
 		} else {
 			return c
 		}
 	}
 	if df.StrIngredient12 != "" {
 		if ingredients[strings.ToUpper(df.StrIngredient12)] {
-			var ingr ingredient
-			if df.StrMeasure12 != "" {
-				ingr = ingredient{df.StrIngredient12, df.StrMeasure12}
-			} else {
-				ingr = ingredient{df.StrIngredient12, "To taste"}
-			}
-			i = append(i, ingr)
+			i = append(i, newIngredient(df.StrIngredient12, df.StrMeasure12))
 		} else {
 			return c
 		}
 	}
 	if df.StrIngredient13 != "" {
 		if ingredients[strings.ToUpper(df.StrIngredient13)] {
-			var ingr ingredient
-			if df.StrMeasure13 != "" {
-				ingr = ingredient{df.StrIngredient13, df.StrMeasure13}
-			} else {
-				ingr = ingredient{df.StrIngredient13, "To taste"}
-			}
-			i = append(i, ingr)
+			i = append(i, newIngredient(df.StrIngredient13, df.StrMeasure13))
 		} else {
 			return c
 		}
 	}
 	if df.StrIngredient14 != "" {
 		if ingredients[strings.ToUpper(df.StrIngredient14)] {
-			var ingr ingredient
-			if df.StrMeasure14 != "" {
-				ingr = ingredient{df.StrIngredient14, df.StrMeasure14}
-			} else {
-				ingr = ingredient{df.StrIngredient14, "To taste"}
-			}
-			i = append(i, ingr)
+			i = append(i, newIngredient(df.StrIngredient14, df.StrMeasure14))
 		} else {
 			return c
 		}
 	}
 	if df.StrIngredient15 != "" {
 		if ingredients[strings.ToUpper(df.StrIngredient15)] {
-			var ingr ingredient
-			if df.StrMeasure15 != "" {
-				ingr = ingredient{df.StrIngredient15, df.StrMeasure15}
-			} else {
-				ingr = ingredient{df.StrIngredient15, "To taste"}
-			}
-			i = append(i, ingr)
+			i = append(i, newIngredient(df.StrIngredient15, df.StrMeasure15))
 		} else {
 			return c
 		}
 	}
-	fmt.Println("added:")
-	fmt.Println(df.StrDrink)
+	fmt.Println("added:", df.StrDrink)
 	return cocktail{df.IDDrink, df.StrDrink, df.StrAlcoholic, df.StrGlass, df.StrInstructions, df.StrDrinkThumb, i}
 }

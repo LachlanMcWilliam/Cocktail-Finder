@@ -17,7 +17,7 @@ You're sections headers will be used to reference location of destination.
 
 This was a project Ive wanted to do for a while now but I never set aside the time to do so. I created a similar webapp in my second year of university, but due to my lack of experience the final result was very slow and rather clunky. So Ive wanted to redo it for quite some time, and yesterday I decided to sit down and do it so I could practice my Vuejs skills and learn Golang along the way.
 
-To view the docs for the Web app the .md files are under the /Client/website/components directory, if you have Vuese cli installed then you can run `vuese serve open` to view them in a web view.
+If you have Vuese cli installed then you can run `vuese serve --open` to view them in a web view.
 
 ---
 
