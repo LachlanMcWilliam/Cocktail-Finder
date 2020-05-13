@@ -71,7 +71,8 @@ type apiCocktail struct {
 }
 
 type prefs struct {
-	APIKey string `json:"key"`
+	APIKey      string `json:"key"`
+	WorkerCount int    `json:"worker_count"`
 }
 
 type cocktail struct {
@@ -116,16 +117,13 @@ type ingString struct {
 }
 
 //Program
-
-var ingredients map[string]bool
 var p prefs
 
 func main() {
 	pf, _ := ioutil.ReadFile("prefs.json")
 	_ = json.Unmarshal(pf, &p)
 
-	ingredients = make(map[string]bool)
-	getIngredientMap()
+	//getIngredientMap()
 
 	m := martini.Classic()
 
@@ -145,18 +143,27 @@ func main() {
 		data, _ := ioutil.ReadAll(req.Body)
 		var p postData
 		json.Unmarshal(data, &p)
-		ds := getCocktails(p.Ingredients)
-		ret, _ := json.Marshal(ds)
-		return ret
+		if len(p.Ingredients) > 0 {
+			results := make(chan []cocktail)
+			go getCocktails(p.Ingredients, results)
+			ds := <-results
+			ret, _ := json.Marshal(ds)
+			return ret
+		} else {
+			return nil
+		}
 	})
 
 	m.Run()
 }
 
-func getIngredientMap() {
+func getIngredientMap() map[string]bool {
+	ingredients := make(map[string]bool)
+
 	req, err := http.Get("https://www.thecocktaildb.com/api/json/v2/" + p.APIKey + "/list.php?i=list")
 	if err != nil {
 		fmt.Println(err)
+		return ingredients
 	} else {
 		data, _ := ioutil.ReadAll(req.Body)
 		var d ingData
@@ -166,12 +173,16 @@ func getIngredientMap() {
 			ingredients[strings.ToUpper(i)] = false
 		}
 	}
+
+	return ingredients
 }
 
-func getCocktails(ing []string) []cocktail {
+func getCocktails(ing []string, r chan<- []cocktail) {
 	counter := 0
 	var cocktails []cocktail
+
 	drinks := make(map[string]basicCocktail)
+	ingredients := getIngredientMap()
 
 	for _, i := range ing {
 		ingredients[strings.ToUpper(i)] = true
@@ -193,16 +204,17 @@ func getCocktails(ing []string) []cocktail {
 	jobs := make(chan string, size)
 	results := make(chan cocktail, size)
 
-	go worker(jobs, results, size-1, &counter, ing)
-	go worker(jobs, results, size-1, &counter, ing)
-	go worker(jobs, results, size-1, &counter, ing)
-	go worker(jobs, results, size-1, &counter, ing)
-	go worker(jobs, results, size-1, &counter, ing)
-	go worker(jobs, results, size-1, &counter, ing)
-	go worker(jobs, results, size-1, &counter, ing)
-	go worker(jobs, results, size-1, &counter, ing)
-	go worker(jobs, results, size-1, &counter, ing)
-	go worker(jobs, results, size-1, &counter, ing)
+	jobEnd := size - 1
+
+	workers := (len(drinks) / p.WorkerCount)
+
+	if workers > 20 {
+		workers = 20
+	}
+
+	for i := 0; i < workers; i++ {
+		go worker(jobs, results, jobEnd, &counter, ingredients)
+	}
 
 	for id := range drinks {
 		jobs <- id
@@ -216,22 +228,20 @@ func getCocktails(ing []string) []cocktail {
 		}
 	}
 
-	for _, i := range ing {
-		ingredients[strings.ToUpper(i)] = false
-	}
-
-	return cocktails
+	r <- cocktails
 }
 
-func worker(j <-chan string, r chan<- cocktail, end int, curr *int, ing []string) {
+func worker(j <-chan string, r chan<- cocktail, end int, curr *int, ingredients map[string]bool) {
+	fmt.Println("Starting worker")
 	for c := range j {
-		drink := getCocktail(c, ing)
+		drink := getCocktail(c, ingredients)
 		r <- drink
 	}
 	if *curr >= end {
 		fmt.Println("results closed")
 		close(r)
 	}
+	fmt.Println("Closing worker")
 }
 
 //DEPRICATED
@@ -255,7 +265,7 @@ func newIngredient(ing string, msr string) ingredient {
 	return ingr
 }
 
-func getCocktail(id string, ing []string) cocktail {
+func getCocktail(id string, ingredients map[string]bool) cocktail {
 
 	resp, err := http.Get("https://www.thecocktaildb.com/api/json/v2/" + p.APIKey + "/lookup.php?i=" + id)
 
