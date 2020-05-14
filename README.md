@@ -39,6 +39,7 @@ If you have Vuese cli installed then you can run `vuese serve --open` to view th
 ## Description
 
 The webapp in its current form takes a list of ingredients from the user, it then sends them on to an intermediary API to process the ingredients and pull the drinks they can make from [thecocktaildb](https://www.thecocktaildb.com/) API
+
 [Back To The Top](#read-me-template)
 
 #### Technologies

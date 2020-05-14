@@ -238,10 +238,8 @@ func worker(j <-chan string, r chan<- cocktail, end int, curr *int, ingredients 
 		r <- drink
 	}
 	if *curr >= end {
-		fmt.Println("results closed")
 		close(r)
 	}
-	fmt.Println("Closing worker")
 }
 
 //DEPRICATED
