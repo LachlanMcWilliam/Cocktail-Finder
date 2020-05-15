@@ -232,7 +232,6 @@ func getCocktails(ing []string, r chan<- []cocktail) {
 }
 
 func worker(j <-chan string, r chan<- cocktail, end int, curr *int, ingredients map[string]bool) {
-	fmt.Println("Starting worker")
 	for c := range j {
 		drink := getCocktail(c, ingredients)
 		r <- drink
@@ -386,6 +385,6 @@ func getCocktail(id string, ingredients map[string]bool) cocktail {
 			return c
 		}
 	}
-	fmt.Println("added:", df.StrDrink)
+	fmt.Println("added:", df.StrDrink, "👍")
 	return cocktail{df.IDDrink, df.StrDrink, df.StrAlcoholic, df.StrGlass, df.StrInstructions, df.StrDrinkThumb, i}
 }
